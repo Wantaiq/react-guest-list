@@ -93,6 +93,7 @@ function App() {
       <div
         className="bg-blue-400 py-1em mt-2em rounded-[20px] tracking-wider text-white font-semibold ring-blue-500 ring-4 flex flex-col justify-center items-center"
         key={item.id}
+        data-test-id="guest"
       >
         <p className="leading-8 text-lg">{item.firstName}</p>
         <p className="text-lg">{item.lastName}</p>
@@ -109,7 +110,7 @@ function App() {
         </div>
         <button
           className="bg-slate-700 text-white font-semibold rounded-full mt-[.5em] px-[1.5em] py-[.5em]"
-          aria-label="remove"
+          aria-label="Remove"
           onClick={() => handleDeleteGuest(item.id)}
         >
           Remove guest
@@ -118,10 +119,7 @@ function App() {
     );
   });
   return (
-    <div
-      data-test-id="guest"
-      className="flex flex-col w-[100%] justify-center items-center"
-    >
+    <div className="flex flex-col w-[100%] justify-center items-center">
       <form
         ref={formRef}
         className="bg-blue-400 py-2.5em px-4em font-semibold tracking-wider rounded-[55px] ring-blue-500 ring-4 text-center flex flex-col"
