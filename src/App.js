@@ -8,7 +8,7 @@ function App() {
   const formRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const baseUrl = 'https://tranquil-retreat-79027.herokuapp.com/guests';
+  const baseUrl = 'https://murmuring-harbor-37320.herokuapp.com/guests';
 
   useEffect(() => {
     async function getAllGuests() {
@@ -135,6 +135,7 @@ function App() {
           value={firstNameInput}
           onChange={(e) => handleFirstNameInput(e)}
           className="mb-1em bg-stone-200 text-center text-slate-900 focus-within:outline-none rounded-full"
+          disabled={isLoading}
         />
         <label htmlFor="lastName" className="mb-[.5em] text-white">
           Last Name
@@ -144,6 +145,7 @@ function App() {
           value={lastNameInput}
           onChange={(e) => handleLastNameInput(e)}
           className="mb-1em bg-stone-200 text-center text-slate-900 focus-within:outline-none rounded-full"
+          disabled={isLoading}
         />
         <button className="bg-slate-700 text-white font-semibold rounded-full mt-[.5em] py-[.55em]">
           Add new guest
