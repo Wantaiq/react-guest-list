@@ -128,7 +128,7 @@ function App() {
         onSubmit={(e) => handleSubmit(e)}
       >
         <label className="text-white mb-[.5em]" htmlFor="firstName">
-          First Name
+          First name
         </label>
         <input
           id="firstName"
@@ -138,7 +138,7 @@ function App() {
           disabled={isLoading}
         />
         <label htmlFor="lastName" className="mb-[.5em] text-white">
-          Last Name
+          Last name
         </label>
         <input
           id="lastName"
