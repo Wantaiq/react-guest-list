@@ -6,15 +6,18 @@ function App() {
   const [lastNameInput, setLastNameInput] = useState('');
   const [guestList, setGuestList] = useState([]);
   const formRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const baseUrl = 'http://localhost:4000/guests';
+  const baseUrl = 'https://tranquil-retreat-79027.herokuapp.com/guests';
 
   useEffect(() => {
     async function getAllGuests() {
       try {
         const response = await fetch(baseUrl);
         const data = await response.json();
+        console.log(data);
         setGuestList(data);
+        setIsLoading(false);
       } catch (err) {
         console.log(err.message);
       }
@@ -46,6 +49,7 @@ function App() {
         }),
       });
       const data = await response.json();
+      console.log(data);
       setGuestList((prevGuestList) => [data, ...prevGuestList]);
     } catch (error) {
       console.log(error.message);
@@ -72,15 +76,6 @@ function App() {
     }
   }
 
-  async function handleDeleteAllGuests() {
-    try {
-      await fetch(baseUrl, { method: 'DELETE' });
-      setGuestList([]);
-    } catch (err) {
-      console.log(err.message);
-    }
-  }
-
   function handleDeleteGuest(id) {
     fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
@@ -95,41 +90,81 @@ function App() {
 
   const guestListHtml = guestList.map((item) => {
     return (
-      <div className="guest" key={item.id}>
-        <p>{item.first_name}</p>
-        <p>{item.last_name}</p>
-        <input
-          id={item.id}
-          type="checkbox"
-          checked={item.attending}
-          aria-label="attending"
-          onChange={() => handleAttendance(item.id, item.attending)}
-        />
-        <label htmlFor={item.id}>Attendance</label>
-        <button onClick={() => handleDeleteGuest(item.id)}>Delete guest</button>
+      <div
+        className="bg-blue-400 py-1em mt-2em rounded-[20px] tracking-wider text-white font-semibold ring-blue-500 ring-4 flex flex-col justify-center items-center"
+        key={item.id}
+      >
+        <p className="leading-8 text-lg">{item.firstName}</p>
+        <p className="text-lg">{item.lastName}</p>
+        <div className="mt-1em py-1em border-t-2 w-[80%] text-center">
+          <input
+            id={item.id}
+            type="checkbox"
+            checked={item.attending}
+            aria-label="attending"
+            onChange={() => handleAttendance(item.id, item.attending)}
+            className="inline-block mx-[.5em]"
+          />
+          <label htmlFor={item.id}>Attendance</label>
+        </div>
+        <button
+          className="bg-slate-700 text-white font-semibold rounded-full mt-[.5em] px-[1.5em] py-[.5em]"
+          aria-label="remove"
+          onClick={() => handleDeleteGuest(item.id)}
+        >
+          Remove guest
+        </button>
       </div>
     );
   });
   return (
-    <>
-      <form ref={formRef} onSubmit={(e) => handleSubmit(e)}>
-        <label htmlFor="firstName">First Name</label>
+    <div
+      data-test-id="guest"
+      className="flex flex-col w-[100%] justify-center items-center"
+    >
+      <form
+        ref={formRef}
+        className="bg-blue-400 py-2.5em px-4em font-semibold tracking-wider rounded-[55px] ring-blue-500 ring-4 text-center flex flex-col"
+        onSubmit={(e) => handleSubmit(e)}
+      >
+        <label className="text-white mb-[.5em]" htmlFor="firstName">
+          First Name
+        </label>
         <input
           id="firstName"
           value={firstNameInput}
           onChange={(e) => handleFirstNameInput(e)}
+          className="mb-1em bg-stone-200 text-center text-slate-900 focus-within:outline-none rounded-full"
         />
-        <label htmlFor="lastName">Last Name</label>
+        <label htmlFor="lastName" className="mb-[.5em] text-white">
+          Last Name
+        </label>
         <input
           id="lastName"
           value={lastNameInput}
           onChange={(e) => handleLastNameInput(e)}
+          className="mb-1em bg-stone-200 text-center text-slate-900 focus-within:outline-none rounded-full"
         />
-        <button>Add new guest</button>
+        <button className="bg-slate-700 text-white font-semibold rounded-full mt-[.5em] py-[.55em]">
+          Add new guest
+        </button>
       </form>
-      {guestListHtml}
-      <button onClick={handleDeleteAllGuests}>Delete all guests</button>
-    </>
+      <div
+        className={
+          isLoading
+            ? 'flex flex-col justify-center items-center'
+            : 'w-[90%] grid grid-cols-[repeat(4,23%)] gap-x-2em'
+        }
+      >
+        {isLoading ? (
+          <h1 className="font-bold text-3xl my-1em tracking-wide">
+            Loading...
+          </h1>
+        ) : (
+          guestListHtml
+        )}
+      </div>
+    </div>
   );
 }
 
